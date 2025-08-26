@@ -16,7 +16,7 @@ pipeline {
 
         stage('Deploy K8s cluster') {
             steps {
-                bat 'kubectl apply -f .\\myprog1\\k8s\\'
+                bat 'kubectl apply -f .\\myprog1\\K8s\\'
             }
         }
     }
