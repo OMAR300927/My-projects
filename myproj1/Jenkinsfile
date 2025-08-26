@@ -10,13 +10,13 @@ pipeline {
 
         stage('Build') {
             steps {
-                bat 'docker build -t myfirstimage myproj1\\my-app\\'
+                bat 'docker build -t myfirstimage .\\myproj1'
             }
         }
 
         stage('Deploy K8s cluster') {
             steps {
-                bat 'kubectl apply -f myprog1\\k8s\\'
+                bat 'kubectl apply -f .\\myprog1\\k8s\\'
             }
         }
     }
