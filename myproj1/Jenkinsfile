@@ -8,14 +8,6 @@ pipeline {
             }
         }
 
-        stage('Test') {
-            steps {
-                bat 'python -m venv venv'
-                bat 'venv\\Scripts\\pip install --upgrade pip'
-                bat 'venv\\Scripts\\pip install pytest'
-            }
-        }
-
         stage('Build') {
             steps {
                 bat 'docker build -t myfirstimage .\\my-app'
