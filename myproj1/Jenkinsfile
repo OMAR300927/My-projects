@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    environment {
+    KUBECONFIG = "C:\\Users\\omsa3\\.kube\\config"
+    }
 
     stages{
         stage('Checkout') {
