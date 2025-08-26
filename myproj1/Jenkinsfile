@@ -3,26 +3,26 @@ pipeline {
 
     stages{
         stage('Checkout') {
-            step {
-                sh 'git clone https://github.com/OMAR300927/My-projects.git'
+            steps {
+                checkout scm
             }
         }
 
         stage('Test') {
-            step {
-                sh 'pytest my-app/test_app.py -v'
+            steps {
+                bat 'pytest my-app/test_app.py -v'
             }
         }
 
         stage('Build') {
-            step {
-                sh 'docker build -t myfirstimage ./my-app'
+            steps {
+                bat 'docker build -t myfirstimage ./my-app'
             }
         }
 
         stage('Deploy K8s cluster') {
-            step {
-                sh 'kubectl apply -f k8s/'
+            steps {
+                bat 'kubectl apply -f k8s/'
             }
         }
     }
