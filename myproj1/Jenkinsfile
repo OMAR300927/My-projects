@@ -10,19 +10,19 @@ pipeline {
 
         stage('Test') {
             steps {
-                bat 'pytest my-app/test_app.py -v'
+                bat 'pytest my-app\\test_app.py -v'
             }
         }
 
         stage('Build') {
             steps {
-                bat 'docker build -t myfirstimage ./my-app'
+                bat 'docker build -t myfirstimage .\\my-app'
             }
         }
 
         stage('Deploy K8s cluster') {
             steps {
-                bat 'kubectl apply -f k8s/'
+                bat 'kubectl apply -f .\\k8s\\'
             }
         }
     }
