@@ -10,7 +10,7 @@ pipeline {
 
         stage('Test') {
             steps {
-                bat '"C:\\Python310\\Scripts\\pytest.exe" my-app\\test_app.py -v'
+                bat '"C:\Users\omsa3\AppData\Roaming\Python" -m pytest my-app\\test_app.py -v'
             }
         }
 
