@@ -10,7 +10,9 @@ pipeline {
 
         stage('Test') {
             steps {
-                bat '"C:\Users\omsa3\AppData\Roaming\Python" -m pytest my-app\\test_app.py -v'
+                bat 'python -m venv venv'
+                bat 'venv\\Scripts\\pip install --upgrade pip'
+                bat 'venv\\Scripts\\pip install pytest'
             }
         }
 
