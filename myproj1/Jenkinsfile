@@ -20,6 +20,7 @@ pipeline {
         stage('Deploy K8s cluster') {
             steps {
                 bat 'kubectl apply -f .\\myproj1\\K8s\\'
+                bat 'minikube service flask-service'
             }
         }
     }
