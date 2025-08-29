@@ -4,3 +4,4 @@ metadata:
   name: flask-configmap
 data:
   app_url: flask-service
+
