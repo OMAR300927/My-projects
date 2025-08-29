@@ -1,9 +1,5 @@
 pipeline {
     agent any
-    environment {
-    KUBECONFIG = "C:\\Users\\omsa3\\.kube\\config"
-    }
-
     stages{
         stage('Checkout') {
             steps {
@@ -13,13 +9,21 @@ pipeline {
 
         stage('Build') {
             steps {
-                bat 'docker build -t myfirstimage .\\myproj1'
+                withCredentials([usernamePassword(credentialsId: 'omarsa999',
+                                usernameVariable: 'DOCKER_USER',
+                                passwordVariable: 'DOCKER_PASS')]) {
+                    bat 'docker login -u %DOCKER_USER% -p %DOCKER_PASS%'
+                }
+                bat 'docker build -t omarsa999/myfirstimage:latest .\\myproj1'
+                bat 'docker push omarsa999/myfirstimage:latest'
             }
         }
 
         stage('Deploy K8s cluster') {
             steps {
+                withKubeConfig([credentialsId: 'Kubeconfig']) {
                 bat 'kubectl apply -f .\\myproj1\\K8s\\'
+                }
             }
         }
     }

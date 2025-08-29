@@ -15,7 +15,10 @@ spec:
       - name: postgres-container
         image: postgres
         ports:
-        - containerPort: 8080
+        - containerPort: 5432
+        env:
+        - name: POSTGRES_PASSWORD
+          value: mysecretpassword
         resources:
           requests:
             cpu: "100m"       # يطلب 0.1 نواة CPU (خفيف جدًا)
@@ -34,5 +37,5 @@ spec:
   selector:
     app: postgres
   ports:
-  - port: 8080
-    targetPort: 8080
+  - port: 5432
+    targetPort: 5432
