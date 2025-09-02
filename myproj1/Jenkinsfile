@@ -7,6 +7,12 @@ pipeline {
             }
         }
 
+        stage('Test') {
+            steps{
+                bat 'pytest myproj1\\my-app\\test_app.py'
+            }
+        }
+
         stage('Build') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'omarsa999',
