@@ -9,7 +9,7 @@ pipeline {
 
         stage('Test') {
             steps{
-                bat 'pytest myproj1\\my-app\\test_app.py'
+                bat 'python -m pytest myproj1\\my-app\\test_app.py'
             }
         }
 
