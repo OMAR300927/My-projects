@@ -9,7 +9,7 @@ pipeline {
 
         stage('Test') {
             steps{
-                bat 'C:\\Users\\omsa3\\AppData\\Local\\Programs\\Python\\Python313\\python.exe -m pytest myproj1\\my-app\\test_app.py'
+                bat 'C:/Users/omsa3/AppData/Local/Programs/Python/Python313/python.exe -m pytest myproj1/my-app/test_app.py'
             }
         }
 
@@ -20,7 +20,7 @@ pipeline {
                                 passwordVariable: 'DOCKER_PASS')]) {
                     bat 'docker login -u %DOCKER_USER% -p %DOCKER_PASS%'
                 }
-                bat 'docker build -t omarsa999/myfirstimage:latest .\\myproj1'
+                bat 'docker build -t omarsa999/myfirstimage:latest ./myproj1'
                 bat 'docker push omarsa999/myfirstimage:latest'
             }
         }
@@ -28,10 +28,7 @@ pipeline {
         stage('Deploy K8s cluster') {
             steps {
                 withKubeConfig([credentialsId: 'Kubeconfig']) {
-                bat 'minikube docker-env --shell cmd > minikube_env.bat' // This get the env variable you need to connect things like docker or kubectl to the minikube
-                bat 'call minikube_env.bat'
-                bat 'kubectl apply -f .\\myproj1\\K8s\\'
-                // (--shell cmd) prepare variables in a format suitable fot the CMD
+                bat 'minikube kubectl -- apply -f ./myproj1/K8s/'
                 }
             }
         }
