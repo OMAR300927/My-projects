@@ -28,7 +28,10 @@ pipeline {
         stage('Deploy K8s cluster') {
             steps {
                 withKubeConfig([credentialsId: 'Kubeconfig']) {
+                bat 'minikube docker-env --shell cmd > minikube_env.bat' // This get the env variable you need to connect things like docker or kubectl to the minikube
+                bat 'call minikube_env.bat'
                 bat 'kubectl apply -f .\\myproj1\\K8s\\'
+                // (--shell cmd) prepare variables in a format suitable fot the CMD
                 }
             }
         }
