@@ -28,7 +28,6 @@ pipeline {
         stage('Deploy K8s cluster') {
             steps {
                 withKubeConfig([credentialsId: 'Kubeconfig']) {
-                bat 'kubectl config use-context minikube'
                 bat 'kubectl apply -f .\\myproj1\\K8s\\'
                 }
             }
