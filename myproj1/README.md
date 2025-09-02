@@ -37,6 +37,7 @@ Build and deploy a simple flask application using jenkins and K8s
 * flask-secret.yaml - K8s secret file
 * flask-configmap.yaml - K8s configmap file
 * postgres.yaml - K8s deployment and service file for postgres DB
+* ingress.yaml - K8s Ingress file to expose Flask service externally
 
 # Conclusion
 
