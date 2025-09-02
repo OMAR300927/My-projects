@@ -28,6 +28,8 @@ pipeline {
         stage('Deploy K8s cluster') {
             steps {
                 withKubeConfig([credentialsId: 'Kubeconfig']) {
+                bat 'kubectl config current-context'
+                bat 'kubectl get nodes'
                 bat 'minikube kubectl -- apply -f ./myproj1/K8s/'
                 }
             }
