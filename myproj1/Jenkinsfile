@@ -28,9 +28,9 @@ pipeline {
         stage('Deploy K8s cluster') {
             steps {
                 withKubeConfig([credentialsId: 'Kubeconfig']) {
-                bat 'echo %USERPROFILE%'
-                bat 'kubectl config current-context'
-                bat 'kubectl get nodes'
+                /*bat 'echo %USERPROFILE%' //Ckeck the file location ( here we talk about kubeconfig )
+                bat 'kubectl config current-context' //Check if Jenkins talk to the right cluster
+                bat 'kubectl get nodes' //Show the nodes*/
                 bat 'minikube kubectl -- apply -f ./myproj1/K8s/'
                 }
             }
