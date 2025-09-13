@@ -25,8 +25,8 @@ pipeline {
         stage('Deploy K8s cluster with ansible') {
             steps {
                 withCredentials([sshUserPrivateKey(credentialsId: 'ansible_vm', keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')]) {
-                    bat 'ssh -i $SSH_KEY -o StrictHostKeyChecking=no $SSH_USER@192.168.1.123 "echo Connected successfully"'
-                    bat 'ssh -i $SSH_KEY -o StrictHostKeyChecking=no $SSH_USER@192.168.1.123 "ansible-playbook -i ~/ansiblefolder/inventory.ini ~/ansiblefolder/apply-cluster.yml"'
+                    bat 'ssh -i %SSH_KEY% -o StrictHostKeyChecking=no %SSH_USER%@192.168.1.123 "echo Connected successfully"'
+                    bat 'ssh -i %SSH_KEY% -o StrictHostKeyChecking=no %SSH_USER%@192.168.1.123 "ansible-playbook -i ~/ansiblefolder/inventory.ini ~/ansiblefolder/apply-cluster.yml"'
                     }
                 }
             }
