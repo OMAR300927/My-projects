@@ -30,7 +30,9 @@ pipeline {
                 
                 // }
 
-                bat 'wsl ssh -o StrictHostKeyChecking=no omar@192.168.1.123 "ansible-playbook -i ~/ansiblefolder/inventory.ini ~/ansiblefolder/apply-cluster.yml"'
+                timeout(time: 10, unit: 'MINUTES') {
+                    bat 'wsl ssh -o StrictHostKeyChecking=no omar@192.168.1.123 "ansible-playbook -i ~/ansiblefolder/inventory.ini ~/ansiblefolder/apply-cluster.yml"'
+                }
                 
 
             }
