@@ -26,7 +26,7 @@ pipeline {
             steps {
                  withCredentials([sshUserPrivateKey(credentialsId: 'ansible_vm', keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')]) {
                 
-                    bat 'wsl ssh -i %SSH_KEY% -o StrictHostKeyChecking=no %SSH_USER%@192.168.1.123 "ansible-playbook -i inventory.ini apply-cluster.yml --vault-password-file vault_key.txt"'
+                    bat 'wsl ssh -i $(wslpath -a "%SSH_KEY%") -o StrictHostKeyChecking=no %SSH_USER%@192.168.1.123 "ansible-playbook -i inventory.ini apply-cluster.yml --vault-password-file vault_key.txt"'
                 
                 }
             }
