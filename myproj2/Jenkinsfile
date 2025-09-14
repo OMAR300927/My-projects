@@ -25,16 +25,10 @@ pipeline {
         stage('Deploy K8s cluster with ansible') {
             steps {
                  withCredentials([sshUserPrivateKey(credentialsId: 'ansible_vm', keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')]) {
-                //     bat 'wsl bash -c "chmod 600 %SSH_KEY% && ssh -i %SSH_KEY% -o StrictHostKeyChecking=no %SSH_USER%@192.168.1.123 echo Connected successfully"'
-                     bat 'ssh -o StrictHostKeyChecking=no $SSH_USER@192.168.1.123 "ansible-playbook -i ~/ansiblefolder/inventory.ini ~/ansiblefolder/apply-cluster.yml"'
                 
-                 }
-
-                /*timeout(time: 5, unit: 'MINUTES') {
-                    bat 'wsl ssh -o StrictHostKeyChecking=no omar@192.168.1.123 "ansible-playbook -i ~/ansiblefolder/inventory.ini ~/ansiblefolder/apply-cluster.yml -vvv"'
-                }*/
+                    bat 'wsl ssh -i %SSH_KEY% -o StrictHostKeyChecking=no %SSH_USER%@192.168.1.123 "ansible-playbook -i inventory.ini apply-cluster.yml --vault-password-file vault_key.txt"'
                 
-
+                }
             }
         }
     }
