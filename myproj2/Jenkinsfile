@@ -24,36 +24,17 @@ pipeline {
 
         stage('Deploy K8s cluster with ansible') {
             steps {
-                script {
-                    withCredentials([sshUserPrivateKey(credentialsId: 'ansible_vm', keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')]) {
-                        try {
-                            bat '''
-                                @echo off
-                                setlocal enabledelayedexpansion
+                withCredentials([sshUserPrivateKey(credentialsId: 'ansible_vm', keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')]) {
+                    bat '''
+                        @echo off
+                        setlocal enabledelayedexpansion
 
-                                copy "%SSH_KEY%" "%WORKSPACE%\\jenkins_key"
+                        wsl ssh -i !WSL_KEY! -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null %SSH_USER%@192.168.1.123 "echo CONNECTED_OK"
 
-                                wsl ssh -i !WSL_KEY! -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null %SSH_USER%@192.168.1.123 "echo READY"
+                        wsl ssh -i !WSL_KEY! -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null %SSH_USER%@192.168.1.123 "ansible-playbook -i /home/omar/ansiblefolder/inventory.ini /home/omar/ansiblefolder/apply-cluster.yml --vault-password-file /home/omar/ansiblefolder/vault_key.txt"
 
-                                for /f "usebackq delims=" %%i in (`wsl wslpath -a "%WORKSPACE%\\jenkins_key"`) do set "WSL_KEY=%%i"
-
-                                echo Converted key: !WSL_KEY!
-
-                                wsl chmod 600 !WSL_KEY!
-
-                                wsl ssh -i !WSL_KEY! -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null %SSH_USER%@192.168.1.123 "echo CONNECTED_OK"
-
-                                wsl ssh -i !WSL_KEY! -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null %SSH_USER%@192.168.1.123 "ansible-playbook -i /home/omar/ansiblefolder/inventory.ini /home/omar/ansiblefolder/apply-cluster.yml --vault-password-file /home/omar/ansiblefolder/vault_key.txt"
-
-                                endlocal
-                            '''
-                        } finally {
-                            // cleanup even if bat fails
-                            bat '''
-                            if exist "%WORKSPACE%\\jenkins_key" del "%WORKSPACE%\\jenkins_key"
-                            '''
-                        }
-                    }
+                        endlocal
+                    '''
                 }
             }
         }
