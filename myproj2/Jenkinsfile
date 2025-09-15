@@ -31,7 +31,7 @@ pipeline {
 
                         wsl ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null %SSH_USER%@192.168.1.123 "echo CONNECTED_OK"
 
-                        wsl ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null %SSH_USER%@192.168.1.123 "ansible-playbook -i /home/omar/ansiblefolder/inventory.ini /home/omar/ansiblefolder/apply-cluster.yml --vault-password-file /home/omar/ansiblefolder/vault_key.txt"
+                        wsl ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null %SSH_USER%@192.168.1.123 "ansible-playbook -i /home/omar/ansiblefolder/inventory.ini /home/omar/ansiblefolder/apply-cluster.yml --vault-password-file /home/omar/ansiblefolder/vault_key.txt --ssh-extra-args='-tt' -vvv"
 
                         endlocal
                     '''
