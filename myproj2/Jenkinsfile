@@ -27,6 +27,8 @@ pipeline {
                  withCredentials([sshUserPrivateKey(credentialsId: 'ansible_vm', keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')]) {
                     bat '''
                         for /f "usebackq delims=" %%i in (`wsl wslpath -a "%SSH_KEY%"`) do set "WSL_KEY=%%i"
+                        echo Converted key: %WSL_KEY%
+                        wsl ssh -i %WSL_KEY% -o StrictHostKeyChecking=no %SSH_USER%@192.168.1.123 "echo CONNECTED_OK"
                         wsl ssh -i %WSL_KEY% -o StrictHostKeyChecking=no %SSH_USER%@192.168.1.123 "ansible-playbook -i inventory.ini apply-cluster.yml --vault-password-file vault_key.txt"
                         '''
                 }
