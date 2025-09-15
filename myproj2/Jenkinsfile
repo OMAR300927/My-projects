@@ -24,36 +24,33 @@ pipeline {
 
         stage('Deploy K8s cluster with ansible') {
             steps {
-                withCredentials([sshUserPrivateKey(credentialsId: 'ansible_vm', keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')]) {
-                    try {
-                        bat '''
-                            @echo off
-                            setlocal enabledelayedexpansion
+                script {
+                    withCredentials([sshUserPrivateKey(credentialsId: 'ansible_vm', keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')]) {
+                        try {
+                            bat '''
+                                @echo off
+                                setlocal enabledelayedexpansion
 
-                            
-                            copy "%SSH_KEY%" "%WORKSPACE%\\jenkins_key"
+                                copy "%SSH_KEY%" "%WORKSPACE%\\jenkins_key"
 
-                            
-                            for /f "usebackq delims=" %%i in (`wsl wslpath -a "%WORKSPACE%\\jenkins_key"`) do set "WSL_KEY=%%i"
+                                for /f "usebackq delims=" %%i in (`wsl wslpath -a "%WORKSPACE%\\jenkins_key"`) do set "WSL_KEY=%%i"
 
-                            echo Converted key: !WSL_KEY!
+                                echo Converted key: !WSL_KEY!
 
-                            
-                            wsl chmod 600 !WSL_KEY!
+                                wsl chmod 600 !WSL_KEY!
 
-                            
-                            wsl ssh -i !WSL_KEY! -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null %SSH_USER%@192.168.1.123 "echo CONNECTED_OK"
+                                wsl ssh -i !WSL_KEY! -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null %SSH_USER%@192.168.1.123 "echo CONNECTED_OK"
 
+                                wsl ssh -i !WSL_KEY! -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null %SSH_USER%@192.168.1.123 "ansible-playbook -i /home/omar/ansiblefolder/inventory.ini /home/omar/ansiblefolder/apply-cluster.yml --vault-password-file /home/omar/ansiblefolder/vault_key.txt"
 
-                            wsl ssh -i !WSL_KEY! -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null %SSH_USER%@192.168.1.123 "ansible-playbook -i /home/omar/ansiblefolder/inventory.ini /home/omar/ansiblefolder/apply-cluster.yml --vault-password-file /home/omar/ansiblefolder/vault_key.txt"
-
-                            endlocal
+                                endlocal
                             '''
-                    } finally {
-                        // تنظيف المفتاح حتى لو فشل أي أمر
-                        bat '''
-                        if exist "%WORKSPACE%\\jenkins_key" del "%WORKSPACE%\\jenkins_key"
-                        '''
+                        } finally {
+                            // cleanup even if bat fails
+                            bat '''
+                            if exist "%WORKSPACE%\\jenkins_key" del "%WORKSPACE%\\jenkins_key"
+                            '''
+                        }
                     }
                 }
             }
